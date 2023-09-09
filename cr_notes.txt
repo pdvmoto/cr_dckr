@@ -1,0 +1,39 @@
+
+pulled image:
+docker pull cockroachdb/cockroach:v23.1.8
+
+web instructions used:
+https://www.cockroachlabs.com/docs/v23.1/start-a-local-cluster-in-docker-mac
+
+docker network create -d bridge roachnet
+
+docker volume create roach1
+docker volume create roach2
+docker volume create roach3
+
+
+
+start instructions ? 
+cockroach start \
+--insecure \
+--store=node1 \
+--listen-addr=localhost:26257 \
+--http-addr=localhost:8080 \
+--join=localhost:26257,localhost:26258,localhost:26259 \
+--background
+
+# docker template, create script... : 
+docker run -d  --name=roach4 --hostname=roach4 --net=roachnet         \
+  -p 26258:26258   -p 8081:8081 -v "roach2:/cockroach/cockroach-data" \
+  cockroachdb/cockroach:v23.1.8 start \
+    --advertise-addr=roach2:26357 --http-addr=roach2:8081 --listen-addr=roach2:26357\
+    --sql-addr=roach2:26258  --insecure     \
+    --join=roach1:26357,roach2:26357,roach3:26357
+
+# psql.. any of the three ports
+psql -h localhost -p 26258 -U root
+
+
+-- 
+select schemaname, tablename from pg_tables 
+where schemaname like 'cr%' and tablename like '%job%';

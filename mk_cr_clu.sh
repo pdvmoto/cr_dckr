@@ -146,15 +146,16 @@ echo .
 read -p "sixth node created ? " abc
 
 # nr 7, the fourth not that is not in the join-list.. ?
+# now experiment with using dflt sql-port locally
 
 docker run -d --name=roach7 --hostname=roach7 --net=roachnet \
-  -p 26263:26263 -p 8087:8087               \
+  -p 26263:26257 -p 8087:8087               \
   -v "vol_roach7:/cockroach/cockroach-data" \
   cockroachdb/cockroach:v23.1.9 start       \
            --http-addr=roach7:8087          \
+            --sql-addr=roach7:26257         \
       --advertise-addr=roach7:26357         \
          --listen-addr=roach7:26357         \
-            --sql-addr=roach7:26263         \
       --insecure     --join=roach1:26357,roach2:26357,roach3:26357
 
 sleep 3

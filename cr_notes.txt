@@ -37,3 +37,7 @@ psql -h localhost -p 26258 -U root
 -- 
 select schemaname, tablename from pg_tables 
 where schemaname like 'cr%' and tablename like '%job%';
+
+
+try capturing leases on al nodes..
+create table crx_leas as select * from crdb_internal.leases ;    

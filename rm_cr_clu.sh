@@ -9,13 +9,29 @@
 #  - investigate K8S.. better ?
 #
 
+echo .
+echo Removing cockroach containers..
+echo .
+echo .
+read -p "ok to remove or Control-C" abc
+
+echo Stopping and Removing Containers.
+
 # remove containers (are they stopped?)
 for node in "roach1 roach2 roach3 roach4 roach5 roach6 roach7"
 do
+  echo stop and rm $node...
   docker stop $node
-  sleep 2
+  sleep 1
   docker rm $node
+  sleep 1
 done
+
+echo .
+echo Removing cockroach volumes as well ? ..
+echo .
+echo .
+read -p "ok to remove Volumes? or Control-C" abc
 
 # volumes, verify cr-stmt that volumes are faster..
 docker volume rm vol_roach1

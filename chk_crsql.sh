@@ -17,7 +17,7 @@ echo .
 # note: better/ideally all container-nodes listen on same port..
 #       and we map the conterner-ports to a set of host-ports 
 
-for node in roach1 roach6 roach7 
+for node in roach1 roach2 roach3 roach4 roach5 roach6 roach7 
 do
 
   echo doing node $node  

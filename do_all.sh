@@ -16,10 +16,10 @@ echo do_all: \[  $* \] ...  cockroach docker cluster
 echo .
 
 # do it once, quick...
-for node in roach1 roach2 roach3 roach4 roach5 roach6 roach7
+for node in roach1 roach2 roach3 roach4 roach5 roach6 roach7 roach8 roach9
 do
 
-  echo doing node $node  
+  echo -n doing node $node ' : ' 
   docker exec -it $node $*
 
 done
@@ -42,8 +42,8 @@ do
   for node in roach1 roach2 roach3 roach4 roach5 roach6 roach7
   do
 
-    echo .
-    echo doing node $node :
+    # echo .
+    echo -n node $node ' : ' 
     docker exec -it $node $*
 
     sleep 2 

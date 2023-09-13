@@ -33,6 +33,8 @@ docker run -d  --name=roach4 --hostname=roach4 --net=roachnet         \
 # psql.. any of the three ports
 psql -h localhost -p 26258 -U root
 
+# haproxy:
+cockroach gen haproxy --insecure --host=localhost --port=26257
 
 -- 
 select schemaname, tablename from pg_tables 
@@ -41,3 +43,5 @@ where schemaname like 'cr%' and tablename like '%job%';
 
 try capturing leases on al nodes..
 create table crx_leas as select * from crdb_internal.leases ;    
+
+# experienting with haproxy  haprox.cfg.. port 26259 

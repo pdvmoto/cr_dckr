@@ -18,9 +18,6 @@
 # - 
 #
 
-# network, cr wants bridged
-docker network create -d bridge roachnet
-
 # volumes, verify cr-stmt that volumes are faster..
 docker volume create vol_roach8
 docker volume create vol_roach9
@@ -48,14 +45,14 @@ docker run -d --name=roach8 --hostname=roach8 --net=roachnet \
            --http-addr=roach8:8080    \
          --listen-addr=roach8:26357   \
             --sql-addr=roach8:26257   \
-      --insecure   --join=roach6:26357,roach7:26357
+      --insecure   --join=roach1:26357,roach2:26357
 
 # seems like a good practice from other clusters
 sleep 3
 
 echo .
 echo .
-read -p "node 8 joined ? " abc
+# read -p "node 8 joined ? " abc
 
 docker run -d --name=roach9 --hostname=roach9 --net=roachnet \
   -p 26265:26257 -p 8089:8080               \

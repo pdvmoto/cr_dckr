@@ -20,10 +20,12 @@
 
 # set -v -x 
 
-# network for cockroach 
+# Start with Network and Storage...  
+
+# roachnet
 docker network create -d bridge roachnet
 
-# volumes, later: verify cr-stmt that volumes are faster..
+# volumes 
 docker volume create vol_roach1
 docker volume create vol_roach2
 docker volume create vol_roach3
@@ -53,11 +55,11 @@ docker run -d --name=roach1 --hostname=roach1 --net=roachnet \
   -p 26257:26257 -p 8081:8080               \
   -v "vol_roach1:/cockroach/cockroach-data" \
   cockroachdb/cockroach:v23.1.9 start \
-      --advertise-addr=roach1:26357   \
-           --http-addr=roach1:8080    \
-         --listen-addr=roach1:26357   \
-            --sql-addr=roach1:26257   \
-      --insecure   --join=roach1:26357,roach2:26357,roach3:26357
+         --http-addr=roach1:8080      \
+          --sql-addr=roach1:26257     \
+    --advertise-addr=roach1:26357     \
+       --listen-addr=roach1:26357     \
+    --insecure   --join=roach1:26357,roach2:26357,roach3:26357
 
 # seems like a good practice from other clusters
 sleep 3
@@ -74,11 +76,11 @@ docker run -d --name=roach2 --hostname=roach2 --net=roachnet \
   -p 26258:26257 -p 8082:8080               \
   -v "vol_roach2:/cockroach/cockroach-data" \
   cockroachdb/cockroach:v23.1.9 start \
-           --http-addr=roach2:8080    \
-            --sql-addr=roach2:26257   \
-      --advertise-addr=roach2:26357   \
-         --listen-addr=roach2:26357   \
-      --insecure     --join=roach1:26357,roach2:26357,roach3:26357
+         --http-addr=roach2:8080    \
+          --sql-addr=roach2:26257   \
+    --advertise-addr=roach2:26357   \
+       --listen-addr=roach2:26357   \
+    --insecure     --join=roach1:26357,roach2:26357,roach3:26357
 
 sleep 3 
 
@@ -197,8 +199,9 @@ echo .
 # verify via node roach1, ..
 docker exec -it roach1 grep 'node starting' /cockroach/cockroach-data/logs/cockroach.log -A 11
 
-# and check SQL...(sneakily use node roach2..)
-docker exec -it roach1 ./cockroach sql --host=roach1:26257 --insecure \
+# and check with an SQL query ...
+docker exec -it roach1 ./cockroach sql --host=roach1:26257 \
+  --insecure                                               \
   -e "select node_id, address, is_live from crdb_internal.gossip_nodes;"
 
 echo . 

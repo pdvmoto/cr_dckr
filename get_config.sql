@@ -152,13 +152,20 @@ create table crx_sn_ranges (
 ) ; 
 
 -- ranges_no_leases??
-create table crx_sn_range_no_l (
-  snap_id    bigint
-, rel_id     bigint
-, parent_schema_id bigint
-, rel_name   text
-, drop_time  timestamp
-, constraint crx_sn_range_no
+create table crx_sn_ranges_no_lse (
+  snap_id     bigint
+, range_id    bigint
+, table_id    bigint 
+, db_name      text
+, schema_name  text
+, table_name   text 
+, index_name   text
+, replicas     text
+, voting_repl  text
+, non_vt_repl  text
+, learner_repl  text
+, constraint crx_sn_ranges_no_lse_pk primary key ( snap_id, range_id )
+) ; 
 
 
 -- kv_dropped_rel, is not snap+id dependent.. 

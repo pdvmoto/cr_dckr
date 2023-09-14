@@ -39,14 +39,14 @@ do
   echo do_all: \[  $* \] ... cockroach on docker
   echo .
 
-  for node in roach1 roach2 roach3 roach4 roach5 roach6 roach7
+  for node in roach1 roach2 roach3 roach4 roach5 roach6 roach7 roach8 roach9
   do
 
     # echo .
     echo -n node $node ' : ' 
     docker exec -it $node $*
 
-    sleep 2 
+    sleep 5 
 
   done
 

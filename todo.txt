@@ -1,0 +1,5 @@
+
+ - get tblinfo view and alias, notably size and storage location of a table.
+ - .psqlrc to all nodes, may have to be an --x or -X command
+ - measure storage filling up.
+ - not essential, just easy: ln -s /usr/local/sbin/vi view

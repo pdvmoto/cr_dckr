@@ -9,7 +9,7 @@ export targetdir=/usr/local/sbin
 
 mkdir $swdir
 
-export swlist="vi find iostat lscpu lsmem unzip watch which zip "
+export swlist="vi find iostat lscpu lsmem more unzip watch which zip "
 export otherlist="ps sadc sadf sar top "
 export nodelist="roach1 roach2 roach3 roach4 roach4  roach5  roach6  roach7  roach8  roach9  "
 

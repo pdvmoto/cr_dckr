@@ -9,6 +9,7 @@
 #  - volumes are Faster ?? verify!
 #  - investigate K8S.. better ?
 #  - add tools to containers ? : .psqlrc, .bashrc, .env?
+#  - try longer sleep to allow node-id = nodename
 #
 # notes: 
 # - seven, to have a nice weird number
@@ -62,7 +63,7 @@ docker run -d --name=roach1 --hostname=roach1 --net=roachnet \
     --insecure   --join=roach1:26357,roach2:26357,roach3:26357
 
 # seems like a good practice from other clusters
-sleep 3
+sleep 8
 
 echo .
 echo .
@@ -82,7 +83,7 @@ docker run -d --name=roach2 --hostname=roach2 --net=roachnet \
        --listen-addr=roach2:26357   \
     --insecure     --join=roach1:26357,roach2:26357,roach3:26357
 
-sleep 3 
+sleep 8 
 
 echo .
 echo .
@@ -102,7 +103,7 @@ sleep 3
 
 echo .
 echo .
-# read -p "third node created ? " abc
+read -p "third node created ? " abc
 
 
 # nr 4, the first one not in the join-list.. ?
@@ -117,11 +118,11 @@ docker run -d --name=roach4 --hostname=roach4 --net=roachnet \
          --listen-addr=roach4:26357         \
       --insecure     --join=roach1:26357,roach2:26357,roach3:26357
 
-sleep 3
+sleep 8
 
 echo .
 echo .
-# read -p "fourth node created ? " abc
+read -p "Fourth node created ? " abc
 
 # nr 5, the second one not in the join-list.. ?
 
@@ -136,7 +137,7 @@ docker run -d --name=roach5 --hostname=roach5 --net=roachnet \
             --sql-addr=roach5:26257         \
       --insecure     --join=roach1:26357,roach2:26357,roach3:26357
 
-sleep 3
+sleep 8
 
 echo .
 echo .
@@ -155,7 +156,7 @@ docker run -d --name=roach6 --hostname=roach6 --net=roachnet \
             --sql-addr=roach6:26257         \
       --insecure     --join=roach1:26357,roach2:26357,roach3:26357
 
-sleep 3
+sleep 8
 
 echo .
 echo .
@@ -202,8 +203,12 @@ docker exec -it roach1 grep 'node starting' /cockroach/cockroach-data/logs/cockr
 # and check with an SQL query ...
 docker exec -it roach1 ./cockroach sql --host=roach1:26257 \
   --insecure                                               \
-  -e "select node_id, address, is_live from crdb_internal.gossip_nodes;"
+  -e "select node_id, address, is_live from crdb_internal.gossip_nodes order by address;"
 
+echo .
+echo Dont Forget, to avoid warnings, but loose some info..for convenience:
+echo  => set cluster setting sql.show_ranges_deprecated_behavior.enabled=false ; 
+echo . 
 echo . 
 echo $0 done, cluster running? check it... 
 echo .

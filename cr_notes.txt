@@ -36,6 +36,13 @@ psql -h localhost -p 26258 -U root
 # haproxy:
 cockroach gen haproxy --insecure --host=localhost --port=26257
 
+using haproxy:
+ - run the haproxy.cfg
+ - have psql connect to port 26250 (listed in haproxy.cfg)
+
+in our case use alia:
+alias crf='psql postgresql://root@localhost:26250/defaultdb?connect_timeout=2 '
+
 -- 
 select schemaname, tablename from pg_tables 
 where schemaname like 'cr%' and tablename like '%job%';
@@ -45,3 +52,43 @@ try capturing leases on al nodes..
 create table crx_leas as select * from crdb_internal.leases ;    
 
 # experienting with haproxy  haprox.cfg.. port 26259 
+
+
+Possible bug: Interrupted (load)transaction leads to a range that will remain on dead and even decommissioned node.
+
+Activities:
+ - 3 node cluster
+ - create several tables, one of them was called "u"
+ - load a 1M datafile, using psql \copy u from 't_data.dat';
+ - interrupted loading due to other activity, killed all nodes.
+ - next day, started nodes. no activity on table u (which held 0 records)
+ - stopped node1 (no problems) stopped node2 as well (cluster stops)
+ - re-start node2: cluster resumes work
+ - added node4, stopped node 2.
+ - added node5, stopped node 3: cluster halts.
+ - cannot stop node3, without impact on whole cluster... ? 
+ - under-repicated range: still has replica on node1, belongs to table u
+ - decommission node: still under-replicated range, belonging to u.
+ - drop table u: no more under-replica.
+ - 
+
+
+-- -- find nodes to remove..-- -
+
+ - find ranges that are still replaced on "non-live" nodes.
+ - any range that has majority (count >1) on non-live nodes is a problem
+ - any nodes that contains replicas from those ranges may need decomm
+
+=> use this to prove that SQL on Ranges is important (to link under-replicated ranges to dead-nodes)
+-> also argue that objects->ranges will show vulnerabilities to node-outages.
+-> take table u, find any two nodes that will stop a range under that table.
+-> SQL is Everything..
+
+select range_id, table_id
+--, '[' || table_name || ']'
+, case table_name when '' then '-unknown-' else table_name end tn 
+, unnest (voting_replicas ) rep_on_node from crdb_internal.ranges r
+
+
+Q: some ranges are not automatically moved off dead nodes ? 
+case description: I started with 3-node cluster. killed node1, then added node4. As expected: the under-replicated were moved to node4, and cluster was resilient about 10min later. I then killed node2, and added node5. On this 2nd replacement, some 61 ranges remained under-replicated for hrs, until I decommissioned the killed node. Why did the 2nd node not automatically got decommissioned ? (if this is an RTFM: just pointme to it...) 

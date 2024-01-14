@@ -18,7 +18,7 @@ read -p "ok to remove or Control-C" abc
 echo Stopping and Removing Containers.
 
 # remove containers (are they stopped?)
-for node in "roach1 roach2 roach3 roach4 roach5 roach6 roach7"
+for node in "roach1 roach2 roach3 roach4 roach5 roach6 roach7 roach8 roach9"
 do
   echo stop and rm $node...
   docker stop $node
@@ -41,6 +41,8 @@ docker volume rm vol_roach4
 docker volume rm vol_roach5
 docker volume rm vol_roach6
 docker volume rm vol_roach7
+docker volume rm vol_roach8
+docker volume rm vol_roach9
 
 # network, cr wants bridged
 docker network rm roachnet

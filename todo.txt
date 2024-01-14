@@ -3,3 +3,4 @@
  - .psqlrc to all nodes, may have to be an --x or -X command
  - measure storage filling up.
  - not essential, just easy: ln -s /usr/local/sbin/vi view
+ - useful:make an alias for psg_kill : psg psql  | tail -n +4 | head -n +1 | cut -c 6-12 | kill -9 `xargs` 

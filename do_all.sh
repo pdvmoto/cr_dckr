@@ -16,7 +16,8 @@ echo do_all: \[  $* \] ...  cockroach docker cluster
 echo .
 
 # do it once, quick...
-for node in roach1 roach2 roach3 roach4 roach5 roach6 roach7 roach8 roach9
+# roach6 roach7 roach8 roach9
+for node in roach1 roach2 roach3 roach4 roach5 
 do
 
   echo -n doing node $node ' : ' 
@@ -36,10 +37,10 @@ while true
 do
 
   echo .
-  echo do_all: \[  $* \] ... cockroach on docker
+  echo ----- $0 : \[  $* \] ... cockroach on docker
   echo .
 
-  for node in roach1 roach2 roach3 roach4 roach5 roach6 roach7 roach8 roach9
+  for node in roach1 roach2 roach3 roach4 roach5 # roach6 roach7 roach8 roach9
   do
 
     # echo .
@@ -50,8 +51,9 @@ do
 
   done
 
-  echo ----- do_all_clu.sh: cockroach loop over nodes done, next.. 
-  sleep 10
+  echo .
+  echo ----- $0 : cockroach loop over nodes done, next.. 
+  sleep 15
 
 done 
 

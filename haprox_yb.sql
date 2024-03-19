@@ -1,0 +1,24 @@
+global
+  maxconn 16
+
+defaults
+    mode                tcp
+    # Timeout values should be configured for your specific use.
+    # See: https://cbonte.github.io/haproxy-dconv/1.8/configuration.html#4-timeout%20connect
+    timeout connect     1s
+    timeout client      10m
+    timeout server      10m
+    # TCP keep-alive on client side. Server already enables them.
+    option              clitcpka
+
+listen psql
+    bind :26250
+    mode tcp
+    balance roundrobin
+    #option httpchk GET /metrics
+    server node2 localhost:5432 check port 9002
+    server node3 localhost:5433 check port 9003
+    server node4 localhost:5434 check port 9004
+    server node5 localhost:5435 check port 9005
+    server node6 localhost:5436 check port 9006
+

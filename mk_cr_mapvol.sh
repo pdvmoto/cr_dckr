@@ -3,6 +3,7 @@
 # mk_cr_clu.sh: create cockroach cluster, try 7 nodes.
 #
 # todo:
+#  - the -v is Dis-Advised to host volumes (see docker pages from cockroach), results in crashes. find alternative
 #  - check.. doublechck
 #  - errors? check node+port for Every setting and mapping..
 #  - how does cluster grow? join-addresses seem fixed at 3 nodes?
@@ -25,7 +26,6 @@
 
 # define which image: version, etc..
 # IMAGE=cockroachdb/cockroach:v23.1.9
-# IMAGE=cockroachdb/cockroach:v24.1.0 
 IMAGE=cockroachdb/cockroach
 
 
@@ -60,7 +60,7 @@ read -p "Volumes created ? ... " abc
 
 docker run -d --name=roach1 --hostname=roach1 --net=roachnet \
   -p 26257:26257 -p 8081:8080               \
-  -v "vol_roach1:/cockroach/cockroach-data" \
+  -v /Users/pdvbv/yb_data/roach1:/cockroach/cockroach-data \
   $IMAGE start \
          --http-addr=roach1:8080      \
           --sql-addr=roach1:26257     \
@@ -81,7 +81,7 @@ echo .
 
 docker run -d --name=roach2 --hostname=roach2 --net=roachnet \
   -p 26258:26257 -p 8082:8080               \
-  -v "vol_roach2:/cockroach/cockroach-data" \
+  -v /Users/pdvbv/yb_data/roach2:/cockroach/cockroach-data \
   $IMAGE start \
          --http-addr=roach2:8080    \
           --sql-addr=roach2:26257   \
@@ -97,7 +97,7 @@ echo .
 
 docker run -d --name=roach3 --hostname=roach3 --net=roachnet \
   -p 26259:26257 -p 8083:8080               \
-  -v "vol_roach3:/cockroach/cockroach-data" \
+  -v /Users/pdvbv/yb_data/roach3:/cockroach/cockroach-data \
   $IMAGE start \
            --http-addr=roach3:8080    \
             --sql-addr=roach3:26257   \
@@ -116,7 +116,7 @@ read -p "third node created ? " abc
 
 docker run -d --name=roach4 --hostname=roach4 --net=roachnet \
   -p 26260:26257 -p 8084:8080               \
-  -v "vol_roach4:/cockroach/cockroach-data" \
+  -v /Users/pdvbv/yb_data/roach4:/cockroach/cockroach-data \
   $IMAGE start       \
            --http-addr=roach4:8080          \
             --sql-addr=roach4:26257         \
@@ -134,7 +134,7 @@ read -p "Fourth node created ? " abc
 
 docker run -d --name=roach5 --hostname=roach5 --net=roachnet \
   -p 26261:26257 -p 8085:8080               \
-  -v "vol_roach5:/cockroach/cockroach-data" \
+  -v /Users/pdvbv/yb_data/roach5:/cockroach/cockroach-data \
   $IMAGE start       \
            --http-addr=roach5:8080          \
             --sql-addr=roach5:26257         \
@@ -153,7 +153,7 @@ echo .
 
 docker run -d --name=roach6 --hostname=roach6 --net=roachnet \
   -p 26262:26257 -p 8086:8080               \
-  -v "vol_roach6:/cockroach/cockroach-data" \
+  -v /Users/pdvbv/yb_data/roach6:/cockroach/cockroach-data \
   $IMAGE start       \
            --http-addr=roach6:8080          \
             --sql-addr=roach6:26257         \
@@ -173,7 +173,7 @@ echo .
 
 docker run -d --name=roach7 --hostname=roach7 --net=roachnet \
   -p 26263:26257 -p 8087:8080               \
-  -v "vol_roach7:/cockroach/cockroach-data" \
+  -v /Users/pdvbv/yb_data/roach7:/cockroach/cockroach-data \
   $IMAGE start       \
            --http-addr=roach7:8080          \
             --sql-addr=roach7:26257         \

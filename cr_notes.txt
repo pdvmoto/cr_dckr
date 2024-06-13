@@ -92,3 +92,10 @@ select range_id, table_id
 
 Q: some ranges are not automatically moved off dead nodes ? 
 case description: I started with 3-node cluster. killed node1, then added node4. As expected: the under-replicated were moved to node4, and cluster was resilient about 10min later. I then killed node2, and added node5. On this 2nd replacement, some 61 ranges remained under-replicated for hrs, until I decommissioned the killed node. Why did the 2nd node not automatically got decommissioned ? (if this is an RTFM: just pointme to it...) 
+
+
+decommission command that worked, executed from a node..: 
+trick is to give it --host host[:port] First, then "node decomm ID" ID  is the number.
+ cockroach --host roach1:26357 node decommission 7 --insecure 
+
+

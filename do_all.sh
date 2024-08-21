@@ -17,7 +17,7 @@ echo .
 
 # do it once, quick...
 # roach6 roach7 roach8 roach9
-for node in roach1 roach2 roach3 roach4 roach5 
+for node in roach1 roach2 roach3 roach4 roach5 roach6 roach7
 do
 
   echo -n doing node $node ' : ' 

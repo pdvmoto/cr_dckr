@@ -187,6 +187,12 @@ echo .
 echo .
 read -p "seventh, and last, node created ? " abc
 
+echo .
+echo install stuff if neeed
+docker exec -it roach2 microdnf install yum -y
+docker exec -it roach2 yum install vim -y
+docker exec -it roach2 yum install procps -y
+docker exec -it roach2 yum install sysstat -y
 
 #
 # nodes are up+running..?
